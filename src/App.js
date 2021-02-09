@@ -3,11 +3,13 @@ import './App.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 import { useState } from 'react';
 import { API_KEY } from './constants';
+import Input from '../src/components/Input'
 
 const App = () => {
   const [inputValue, setInputValue] = useState('')
   const [loading, setLoading] = useState(false)
-  const [results, setResults] = useState()
+  const [results, setResults] = useState([])
+  const [errors, setErrors] = useState(null)
 
   const getMovieSearchByValue = async () => {
     try {
@@ -25,7 +27,7 @@ const App = () => {
       }
     }
     catch (err) {
-      console.log(err)
+      setErrors(err)
     } finally {
       setLoading(false)
     }
@@ -44,26 +46,16 @@ const App = () => {
     }
   }
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      getMovieSearchByValue(inputValue)
+      setInputValue('')
+    }
+  }
+
   return (
     <>
-      <div className="input-group">
-        <input
-          className="form-control"
-          type="text"
-          value={inputValue}
-          onChange={onSearchChange}
-          placeholder="Search here..."
-        />
-        <div className="input-group-append">
-          <button
-            type="button"
-            className="btn btn-outline-info"
-            onClick={onButtonClick}>
-            Search
-          </button>
-        </div>
-      </div>
-
+      <Input inputValue={inputValue} onClick={onButtonClick} onChange={onSearchChange} onKeyPress={handleKeyPress} />
       <div className="container">
         {results && results.length &&
           <div>
