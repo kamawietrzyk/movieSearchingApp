@@ -1,7 +1,8 @@
 import React from 'react'
+import './styles.scss'
 
 const Input = ({ inputValue, onClick, onChange, onKeyPress }) => (
-    <div className="input-group">
+    <div className="Input input-group">
         <input
             className="form-control"
             type="text"

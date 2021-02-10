@@ -1,9 +1,10 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 import { useState } from 'react';
 import { API_KEY } from './constants';
 import Input from '../src/components/Input'
+import Movie from './components/Movie';
 
 const App = () => {
   const [inputValue, setInputValue] = useState('')
@@ -14,6 +15,8 @@ const App = () => {
   const getMovieSearchByValue = async () => {
     try {
       setLoading(true)
+      setErrors(null)
+
       const url = `http://www.omdbapi.com/?s=${inputValue}&apikey=${API_KEY}`;
       const response = await fetch(url, { method: 'GET' });
       const data = await response.json()
@@ -31,8 +34,6 @@ const App = () => {
     } finally {
       setLoading(false)
     }
-
-    console.log('data', results)
   }
 
   const onSearchChange = (e) => {
@@ -54,16 +55,29 @@ const App = () => {
   }
 
   return (
-    <>
+    <div className="App">
+      <h1>Movies Searching App</h1>
+      <small>Created by Kama Swoboda-Wietrzyk</small>
       <Input inputValue={inputValue} onClick={onButtonClick} onChange={onSearchChange} onKeyPress={handleKeyPress} />
-      <div className="container">
-        {results && results.length &&
-          <div>
-            {results.length}
-            {/* TODO: create Card displaying results, then map() */}
-          </div>}
+      <div className="App__content">
+        {loading &&
+          <div className="spinner-border text-info mb-4">
+            <span className="sr-only">Loading...</span>
+          </div>
+        }
+        {errors &&
+          <h2 className="text-danger">{errors}</h2>}
+        {results.length > 0 ? (
+          <div className="results">
+            {results.map((res) => (
+              <Movie res={res} />
+            ))}
+          </div>
+        ) : (
+            <h2>{loading ? '' : 'No results'}</h2>
+          )}
       </div>
-    </>
+    </div>
   )
 }
 
