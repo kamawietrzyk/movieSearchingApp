@@ -26,6 +26,7 @@ const App = () => {
       }
 
       if (data.Response === 'False') {
+        setErrors(data.Error)
         return setResults([])
       }
     }
@@ -61,7 +62,7 @@ const App = () => {
       <Input inputValue={inputValue} onClick={onButtonClick} onChange={onSearchChange} onKeyPress={handleKeyPress} />
       <div className="App__content">
         {loading &&
-          <div className="spinner-border text-info mb-4">
+          <div className="spinner-border text-info mb-3">
             <span className="sr-only">Loading...</span>
           </div>
         }
@@ -74,7 +75,7 @@ const App = () => {
             ))}
           </div>
         ) : (
-            <h2>{loading ? '' : 'No results'}</h2>
+            <h2>{loading || errors ? '' : 'No results'}</h2>
           )}
       </div>
     </div>
