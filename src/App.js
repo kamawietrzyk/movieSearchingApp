@@ -17,7 +17,7 @@ const App = () => {
       setLoading(true)
       setErrors(null)
 
-      const url = `http://www.omdbapi.com/?s=${inputValue}&apikey=${API_KEY}`;
+      const url = `https://www.omdbapi.com/?s=${inputValue}&apikey=${API_KEY}`;
       const response = await fetch(url, { method: 'GET' });
       const data = await response.json()
 
